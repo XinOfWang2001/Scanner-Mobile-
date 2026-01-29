@@ -1,4 +1,4 @@
-package com.ui.scannerapp
+package com.ui.scannerapp.pages
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -16,7 +16,6 @@ import com.ui.scannerapp.ui.theme.ScannerAppTheme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        print("Hello world.")
         enableEdgeToEdge()
         setContent {
             ScannerAppTheme {
