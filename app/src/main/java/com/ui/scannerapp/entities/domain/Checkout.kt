@@ -4,30 +4,31 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 
 class Checkout {
-    val Cart: HashMap<String, MutableList<Product>>
-        get() {
-            TODO()
-        }
+    // TODO: Check if number instead of Mutable list is more efficiënt.
+    var cart: HashMap<String, MutableList<Product>> = HashMap<String, MutableList<Product>>()
+
     fun AddToCart(product: Product){
-        var productList = Cart.get(product.LabelId)
+        var productList = cart.get(product.labelId)
         if(productList.isNullOrEmpty()){
-            productList = MutableList(1,  { product });
+            productList = mutableListOf(product)
+            cart[product.labelId] = productList;
         }
-        productList.add(product);
+        else
+        {
+            productList.add(product)
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.VANILLA_ICE_CREAM)
     fun RemoveProduct(product: Product){
-        val productList: MutableList<Product>  = Cart.get(product.LabelId)!!
+        val productList: MutableList<Product>  = cart.get(product.labelId)!!
         if(productList.size > 1){
             productList.removeLast();
         } else{
             // Otherwise remove entire product line from Checkout cart.
-            Cart.remove(product.LabelId)
+            cart.remove(product.labelId)
         }
     }
-
-    fun CalculateReceipt(){
-        println("Start calculation of cart content.")
-    }
+//    fun CalculateReceipt(){
+//    }
 }
