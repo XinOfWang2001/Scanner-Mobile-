@@ -28,6 +28,5 @@ class Checkout {
     }
 
     fun CalculateReceipt(){
-        println("Start calculation of cart content.")
     }
 }
