@@ -39,6 +39,16 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
+    override fun onResume() {
+        super.onResume()
+        println("App is on BACK.")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        println("App is on paused. Be right back.")
+    }
 }
 @Composable
 fun MainEntryPoint(){
