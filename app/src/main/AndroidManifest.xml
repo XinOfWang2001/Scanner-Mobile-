@@ -12,6 +12,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ScannerApp">
         <activity
+            android:name=".pages.ScannerActivity"
+            android:exported="false"
+            android:label="@string/title_activity_scanner"
+            android:theme="@style/Theme.ScannerApp" />
+        <activity
             android:name=".pages.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.ScannerApp">
