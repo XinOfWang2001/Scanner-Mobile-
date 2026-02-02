@@ -26,9 +26,9 @@ class ProductCartTest {
         val cart = Checkout()
 
         // Test
-        cart.AddToCart(donut)
-        cart.AddToCart(chocolateDonut)
-        cart.AddToCart(frikandelBrood)
+        cart.addProduct(donut)
+        cart.addProduct(chocolateDonut)
+        cart.addProduct(frikandelBrood)
         // validate
 
         assertEquals(3, cart.cart.size)
@@ -44,8 +44,8 @@ class ProductCartTest {
         val cart = Checkout()
 
         // Test
-        cart.AddToCart(donut)
-        cart.AddToCart(donut2)
+        cart.addProduct(donut)
+        cart.addProduct(donut2)
 
         // Validate
         assertEquals(1, cart.cart.size)
@@ -57,11 +57,11 @@ class ProductCartTest {
         val donut = Product(1, "donut", "Plain donut", "Brood", 0.4f)
         val donut2 = Product(1, "donut", "Plain donut", "Brood", 0.4f)
         val cart = Checkout()
-        cart.AddToCart(donut)
-        cart.AddToCart(donut2)
+        cart.addProduct(donut)
+        cart.addProduct(donut2)
 
         // Test one removal
-        cart.RemoveProduct(donut)
+        cart.removeProduct(donut)
 
         assertEquals(1, cart.cart.size)
         assertEquals(1, cart.cart.get("donut")!!.size)
@@ -71,12 +71,12 @@ class ProductCartTest {
         val donut = Product(1, "donut", "Plain donut", "Brood", 0.4f)
         val donut2 = Product(1, "donut", "Plain donut", "Brood", 0.4f)
         val cart = Checkout()
-        cart.AddToCart(donut)
-        cart.AddToCart(donut2)
+        cart.addProduct(donut)
+        cart.addProduct(donut2)
 
         // Test one removal
-        cart.RemoveProduct(donut)
-        cart.RemoveProduct(donut2)
+        cart.removeProduct(donut)
+        cart.removeProduct(donut2)
 
         assertEquals(0, cart.cart.size)
     }

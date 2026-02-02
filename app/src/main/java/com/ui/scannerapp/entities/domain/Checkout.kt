@@ -7,7 +7,7 @@ class Checkout {
     // TODO: Check if number instead of Mutable list is more efficiënt.
     var cart: HashMap<String, MutableList<Product>> = HashMap<String, MutableList<Product>>()
 
-    fun AddToCart(product: Product){
+    fun addProduct(product: Product){
         var productList = cart.get(product.labelId)
         if(productList.isNullOrEmpty()){
             productList = mutableListOf(product)
@@ -20,7 +20,7 @@ class Checkout {
     }
 
     @RequiresApi(Build.VERSION_CODES.VANILLA_ICE_CREAM)
-    fun RemoveProduct(product: Product){
+    fun removeProduct(product: Product){
         val productList: MutableList<Product>  = cart.get(product.labelId)!!
         if(productList.size > 1){
             productList.removeLast();
