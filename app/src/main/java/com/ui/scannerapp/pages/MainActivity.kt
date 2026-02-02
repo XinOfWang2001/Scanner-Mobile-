@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.ui.scannerapp.pages.example.Message
 import com.ui.scannerapp.pages.example.MessageCard
-import com.ui.scannerapp.ui.theme.ScannerAppTheme
+import com.ui.scannerapp.pages.theme.ScannerAppTheme
 
 // Home page
 class MainActivity : ComponentActivity() {

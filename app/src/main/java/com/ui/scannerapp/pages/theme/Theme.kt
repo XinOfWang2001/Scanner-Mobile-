@@ -1,6 +1,5 @@
-package com.ui.scannerapp.ui.theme
+package com.ui.scannerapp.pages.theme
 
-import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
