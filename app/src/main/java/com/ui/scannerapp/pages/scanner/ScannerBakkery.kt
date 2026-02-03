@@ -19,3 +19,8 @@ fun Conversation(messages: List<Message>) {
         }
     }
 }
+
+@Composable
+fun CameraFunction(){
+    
+}
