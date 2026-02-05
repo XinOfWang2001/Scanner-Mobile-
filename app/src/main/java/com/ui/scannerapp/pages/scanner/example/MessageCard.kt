@@ -1,4 +1,4 @@
-package com.ui.scannerapp.pages.example
+package com.ui.scannerapp.pages.scanner.example
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize

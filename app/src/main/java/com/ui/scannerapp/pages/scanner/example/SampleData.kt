@@ -1,4 +1,4 @@
-import com.ui.scannerapp.pages.example.Message
+import com.ui.scannerapp.pages.scanner.example.Message
 
 /**
  * SampleData for Jetpack Compose Tutorial 
