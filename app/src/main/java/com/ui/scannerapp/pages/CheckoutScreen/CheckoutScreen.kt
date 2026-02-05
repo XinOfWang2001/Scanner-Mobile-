@@ -1,6 +1,5 @@
 package com.ui.scannerapp.pages.CheckoutScreen
 
-import android.R
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -19,9 +18,20 @@ import com.ui.scannerapp.entities.domain.Checkout
 import com.ui.scannerapp.entities.domain.Product
 import com.ui.scannerapp.pages.theme.textPad
 
+// MAIN VIEW
+@Composable
+fun CheckoutScreen(){
+    var checkOut by remember { mutableStateOf(Checkout()) }
+    // Dummy values
+    checkOut = sampleProducts(checkOut)
+    LazyColumn() {
+        item { CheckoutOverview(checkOut) }
+    }
+}
+
 @Preview(showBackground = true)
 @Composable
-fun CheckoutScreen() {
+fun CheckoutScreenPreview() {
     var checkOut by remember { mutableStateOf(Checkout()) }
     // Dummy values
     checkOut = sampleProducts(checkOut)
@@ -31,15 +41,7 @@ fun CheckoutScreen() {
     }
 }
 
-@Composable
-fun ScannerView(){
-    var checkOut by remember { mutableStateOf(Checkout()) }
-    // Dummy values
-    checkOut = sampleProducts(checkOut)
-    LazyColumn() {
-        item { CheckoutOverview(checkOut) }
-    }
-}
+
 
 fun sampleProducts(checkOut: Checkout): Checkout{
     // Dummy values
