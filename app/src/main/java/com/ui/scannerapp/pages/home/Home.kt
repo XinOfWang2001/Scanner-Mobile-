@@ -7,6 +7,8 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import com.ui.scannerapp.pages.CheckoutScreen.ScannerFeature.CameraWithCapture
+import com.ui.scannerapp.pages.CheckoutScreen.ScannerFeature.VisionFunction
 import com.ui.scannerapp.pages.theme.spaceHeightSmall
 
 @Composable
@@ -27,5 +29,7 @@ fun HomeView(onNavigateToProfile: () -> Unit) {
 @Preview(showBackground = true)
 @Composable
 fun HomeViewPreview() {
+    VisionFunction()
+    CameraWithCapture()
     HomeView(onNavigateToProfile = {})
 }

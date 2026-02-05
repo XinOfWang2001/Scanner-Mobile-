@@ -50,11 +50,16 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     // CameraX libraries
     implementation(libs.androidx.camera.core)
+    implementation(libs.androidx.camera.camera2)
     implementation(libs.androidx.camera.lifecycle)
+    implementation(libs.androidx.camera.view)
     implementation(libs.androidx.camera.mlkit.vision)
     implementation(libs.vision.common)
     implementation(libs.play.services.mlkit.text.recognition.common)
     implementation(libs.play.services.mlkit.text.recognition)
+    // PyTorch
+    implementation(libs.pytorch.android.lite)
+    implementation(libs.pytorch.android.torchvision.lite)
     // Test software
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
