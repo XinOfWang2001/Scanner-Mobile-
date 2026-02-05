@@ -1,17 +1,13 @@
-package com.ui.scannerapp.pages.scanner.example
+package com.ui.scannerapp.pages.CheckoutScreen.example
 
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -22,13 +18,16 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.ui.scannerapp.R
+import com.ui.scannerapp.pages.theme.ImageFormat
 import com.ui.scannerapp.pages.theme.ScannerAppTheme
-
+import com.ui.scannerapp.pages.theme.animationContentSize
+import com.ui.scannerapp.pages.theme.mediumWidth
+import com.ui.scannerapp.pages.theme.spaceHeight
+import com.ui.scannerapp.pages.theme.textPad
 
 
 @Composable
@@ -38,12 +37,9 @@ fun MessageCard(msg: Message) {
         Image(
             painter = painterResource(R.drawable.afstuderen___stakeholdermatrix),
             contentDescription = null,
-            modifier = Modifier
-                .size(40.dp)
-                .clip(CircleShape)
-                .border(1.5.dp, MaterialTheme.colorScheme.primary, CircleShape)
+            modifier = ImageFormat.border(1.5.dp, MaterialTheme.colorScheme.primary, CircleShape)
         )
-        Spacer(modifier = Modifier.width(8.dp))
+        Spacer(modifier = mediumWidth)
 
         // We keep track if the message is expanded or not in this
         // variable
@@ -57,7 +53,7 @@ fun MessageCard(msg: Message) {
                 style = MaterialTheme.typography.titleSmall
             )
 
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = spaceHeight)
             val surfaceColor by animateColorAsState(
                 if (isExpanded) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surface,
             )
@@ -67,12 +63,12 @@ fun MessageCard(msg: Message) {
                 // surfaceColor color will be changing gradually from primary to surface
                 color = surfaceColor,
                 // animateContentSize will change the Surface size gradually
-                modifier = Modifier.animateContentSize().padding(1.dp)
+                modifier = animationContentSize
 
             ) {
                 Text(
                     text = msg.body,
-                    modifier = Modifier.padding(all = 4.dp),
+                    modifier = textPad,
                     maxLines = if (isExpanded) Int.MAX_VALUE else 1,
                     style = MaterialTheme.typography.bodyMedium
                 )

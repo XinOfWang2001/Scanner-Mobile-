@@ -1,4 +1,4 @@
-package com.ui.scannerapp.pages.scanner
+package com.ui.scannerapp.pages.CheckoutScreen
 
 import android.content.Context
 import android.net.Uri
