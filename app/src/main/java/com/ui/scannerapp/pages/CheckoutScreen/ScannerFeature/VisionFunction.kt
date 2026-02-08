@@ -61,7 +61,7 @@ fun CameraWithCapture() {
             Text("Image captured at: $uri")
             Button(onClick = {
                 // Stub for processing image with a model
-                val result = processImageWithModel(uri, "YourModelName")
+                processImageWithModel(uri, "YourModelName")
                 // You can display the result here
             }) {
                 Text("Process Image")

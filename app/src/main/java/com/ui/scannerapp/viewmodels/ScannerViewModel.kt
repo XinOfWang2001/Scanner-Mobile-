@@ -16,7 +16,7 @@ class ScannerViewModel {
     */
 
     fun OpenCamera(){
-        println("Open Camera");
+        println("Open Camera")
     }
 
     fun DetectProducts(){
@@ -24,7 +24,7 @@ class ScannerViewModel {
     }
 
     fun GeneratePrediction(){
-        println("Predict this product");
+        println("Predict this product")
     }
 
     fun ChangeProducts(index: Int){

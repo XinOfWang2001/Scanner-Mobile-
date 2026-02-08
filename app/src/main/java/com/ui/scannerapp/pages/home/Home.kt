@@ -13,12 +13,12 @@ import com.ui.scannerapp.pages.theme.spaceHeightSmall
 
 @Composable
 fun HomeView(onNavigateToProfile: () -> Unit) {
-    Column() {
+    Column {
         Spacer(modifier = spaceHeightSmall)
-        Row() {
+        Row {
             Text("Friends List")
         }
-        Row() {
+        Row {
             Button(onClick = { onNavigateToProfile() }) {
                 Text("Go to Profile")
             }

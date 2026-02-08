@@ -24,7 +24,7 @@ fun CheckoutScreen(){
     var checkOut by remember { mutableStateOf(Checkout()) }
     // Dummy values
     checkOut = sampleProducts(checkOut)
-    LazyColumn() {
+    LazyColumn {
         item { CheckoutOverview(checkOut) }
     }
 }
@@ -36,7 +36,7 @@ fun CheckoutScreenPreview() {
     // Dummy values
     checkOut = sampleProducts(checkOut)
 
-    LazyColumn() {
+    LazyColumn {
         item { CheckoutOverview(checkOut) }
     }
 }
@@ -60,9 +60,9 @@ fun sampleProducts(checkOut: Checkout): Checkout{
 
 @Composable
 fun CheckoutOverview(checkOut: Checkout){
-    checkOut.cart.forEach { (key, value) ->
+    checkOut.cart.forEach { (_, value) ->
         Row(modifier = Modifier.padding(all = 8.dp)) {
-            Column() {
+            Column {
                 ProductComponent(value[0], value.size)
             }
         }
@@ -77,7 +77,7 @@ fun ProductComponent(product: Product, quantity: Int){
             style = MaterialTheme.typography.titleMedium,
             text = product.name)
     }
-    Row() {
+    Row {
         Column(modifier = textPad) {
             Text("Price",
                 color = MaterialTheme.colorScheme.secondary,

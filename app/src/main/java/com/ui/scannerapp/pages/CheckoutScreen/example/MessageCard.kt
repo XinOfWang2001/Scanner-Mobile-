@@ -86,5 +86,4 @@ fun MessageCardPreview() {
         MessageCard(message)
     }
 }
-class Message(val author: String, val body: String) {
-}
+class Message(val author: String, val body: String)

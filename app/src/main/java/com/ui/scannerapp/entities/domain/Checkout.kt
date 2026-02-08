@@ -11,7 +11,7 @@ class Checkout {
         var productList = cart.get(product.labelId)
         if(productList.isNullOrEmpty()){
             productList = mutableListOf(product)
-            cart[product.labelId] = productList;
+            cart[product.labelId] = productList
         }
         else
         {
@@ -23,7 +23,7 @@ class Checkout {
     fun removeProduct(product: Product){
         val productList: MutableList<Product>  = cart.get(product.labelId)!!
         if(productList.size > 1){
-            productList.removeLast();
+            productList.removeLast()
         } else{
             // Otherwise remove entire product line from Checkout cart.
             cart.remove(product.labelId)
