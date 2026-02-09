@@ -1,10 +1,14 @@
 package com.ui.scannerapp.pages.CheckoutScreen
 
+import android.graphics.drawable.Icon
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -18,30 +22,44 @@ import com.ui.scannerapp.entities.domain.Checkout
 import com.ui.scannerapp.entities.domain.Product
 import com.ui.scannerapp.pages.theme.textPad
 
+
 // MAIN VIEW
 @Composable
-fun CheckoutScreen(){
+fun CheckoutScreen(overrideCheckout: Checkout? = null, scanProduct: () -> Unit){
     var checkOut by remember { mutableStateOf(Checkout()) }
-    // Dummy values
-    checkOut = sampleProducts(checkOut)
-    LazyColumn {
-        item { CheckoutOverview(checkOut) }
+
+    checkOut = overrideCheckout.takeUnless {
+        it == null
+    } ?: sampleProducts(checkOut)
+    Scaffold(
+        floatingActionButton = {
+            ScannerButton(onClick = scanProduct)
+        }
+    ) { values ->
+        LazyColumn (modifier = Modifier.padding(0.dp, 0.dp, 0.dp, values.calculateBottomPadding())){
+            item {
+                CheckoutOverview(checkOut)
+            }
+        }
     }
+
 }
 
 @Preview(showBackground = true)
 @Composable
 fun CheckoutScreenPreview() {
-    var checkOut by remember { mutableStateOf(Checkout()) }
     // Dummy values
-    checkOut = sampleProducts(checkOut)
-
-    LazyColumn {
-        item { CheckoutOverview(checkOut) }
-    }
+    CheckoutScreen(null, scanProduct = {})
 }
 
-
+@Composable
+fun ScannerButton(onClick: () -> Unit){
+    FloatingActionButton(
+        onClick = { onClick() },
+    ) {
+       Text("Scan bread")
+    }
+}
 
 fun sampleProducts(checkOut: Checkout): Checkout{
     // Dummy values
