@@ -1,10 +1,13 @@
 package com.ui.scannerapp.pages.CheckoutScreen
 
-import android.graphics.drawable.Icon
+import androidx.compose.material.icons.Icons
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.R
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.rounded.Shop
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -16,12 +19,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.ui.scannerapp.entities.domain.Checkout
 import com.ui.scannerapp.entities.domain.Product
 import com.ui.scannerapp.pages.theme.textPad
-
+import com.ui.scannerapp.services.implementations.sampleProducts
 
 // MAIN VIEW
 @Composable
@@ -34,15 +38,14 @@ fun CheckoutScreen(overrideCheckout: Checkout? = null, scanProduct: () -> Unit){
     Scaffold(
         floatingActionButton = {
             ScannerButton(onClick = scanProduct)
-        }
+        },
     ) { values ->
-        LazyColumn (modifier = Modifier.padding(0.dp, 0.dp, 0.dp, values.calculateBottomPadding())){
+        LazyColumn (modifier = Modifier.padding(values.calculateBottomPadding())){
             item {
                 CheckoutOverview(checkOut)
             }
         }
     }
-
 }
 
 @Preview(showBackground = true)
@@ -56,24 +59,14 @@ fun CheckoutScreenPreview() {
 fun ScannerButton(onClick: () -> Unit){
     FloatingActionButton(
         onClick = { onClick() },
+        containerColor = MaterialTheme.colorScheme.primaryContainer,
+        contentColor = MaterialTheme.colorScheme.onPrimaryContainer
     ) {
-       Text("Scan bread")
+        Icon(
+            Icons.Filled.Add,
+            contentDescription = "Add",
+            modifier = Modifier.padding(5.dp))
     }
-}
-
-fun sampleProducts(checkOut: Checkout): Checkout{
-    // Dummy values
-    val donut = Product(1, "donut", "Plain donut", "Brood", 0.4f)
-    val donut2 = Product(1, "donut", "Plain donut", "Brood", 0.4f)
-    val ananas1 = Product(22, "ananas", "anannas", "Brood", 0.4f)
-    val apple = Product(23, "appel", "appel", "Brood", 0.4f)
-    val peer = Product(24, "peer", "peer", "Brood", 0.4f)
-    checkOut.addProduct(donut)
-    checkOut.addProduct(donut2)
-    checkOut.addProduct(ananas1)
-    checkOut.addProduct(apple)
-    checkOut.addProduct(peer)
-    return  checkOut
 }
 
 @Composable
