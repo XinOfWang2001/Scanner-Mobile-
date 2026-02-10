@@ -66,20 +66,20 @@ fun MainEntryPoint(){
         // 4. Pass the controller into your NavHost
         NavHost(
             navController = navController,
-            startDestination = "home",
+            startDestination = "Home",
             modifier = Modifier.padding(innerPadding)
         ) {
-            composable("home") {
-                HomeView(onNavigateToProfile = { navController.navigate("detail") })
+            composable("Home") {
+                HomeView(onNavigateToProfile = { navController.navigate("Overview") })
             }
-            composable("detail") {
+            composable("Overview") {
                 // TODO: TEMP Solution, decouple this logic by passing NavHostController
                 CheckoutScreen(null, scanProduct = {
-                    navController.navigate("scan")
+                    navController.navigate("Bread-scanner")
 
                 })
             }
-            composable("scan") {
+            composable("Bread-scanner") {
                 ScannerScreen(navController)
             }
         }

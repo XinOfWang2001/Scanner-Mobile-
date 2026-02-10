@@ -13,6 +13,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 
 val textPad = Modifier.padding(all = 4.dp)
+val horizontalPadding = Modifier.padding(start = 8.dp, end = 8.dp)
 val spaceHeight = Modifier.height(4.dp)
 val mediumWidth = Modifier.width(8.dp)
 val spaceHeightSmall = Modifier.padding(horizontal = 1.2.dp, vertical = 2.dp)
