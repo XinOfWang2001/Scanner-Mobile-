@@ -70,6 +70,7 @@ fun CameraWithCapture() {
     }
 }
 
+// Should be moved
 private fun takePicture(context: Context, cameraController: LifecycleCameraController, onImageCaptured: (Uri) -> Unit) {
     val photoFile = File(context.filesDir, "${System.currentTimeMillis()}.jpg")
     val outputOptions = ImageCapture.OutputFileOptions.Builder(photoFile).build()
