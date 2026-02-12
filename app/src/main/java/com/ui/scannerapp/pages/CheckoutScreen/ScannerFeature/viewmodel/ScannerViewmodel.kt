@@ -1,10 +1,8 @@
-package com.ui.scannerapp.pages.CheckoutScreen.viewmodel
+package com.ui.scannerapp.pages.CheckoutScreen.ScannerFeature.viewmodel
 import android.content.Context
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import androidx.camera.core.ImageCaptureException
-import androidx.camera.view.LifecycleCameraController
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -49,6 +47,7 @@ class ScannerViewModel : ViewModel() {
     }
 
     fun onRetake() {
+        println("Time to retake the picture.")
         uiState = ScannerUiState() // Reset state
     }
 
@@ -56,6 +55,7 @@ class ScannerViewModel : ViewModel() {
         uiState = uiState.copy(errorMessage = "Capture failed: ${exception.message}")
     }
 
+    // TODO: Move to seperate service class.
     private suspend fun processImageWithModel(imageUri: Uri, modelName: String): String {
         // In a real implementation, you would load your PyTorch model here
         // and perform inference on the image.

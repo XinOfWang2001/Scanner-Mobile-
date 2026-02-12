@@ -1,4 +1,4 @@
-package com.ui.scannerapp.pages.CheckoutScreen
+package com.ui.scannerapp.pages.CheckoutScreen.ScannerFeature
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,7 +14,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.ui.scannerapp.pages.CheckoutScreen.ScannerFeature.VisionFunction
 import com.ui.scannerapp.pages.theme.horizontalPadding
 
 // Main screen
