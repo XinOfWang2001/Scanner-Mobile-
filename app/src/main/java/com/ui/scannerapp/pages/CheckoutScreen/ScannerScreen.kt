@@ -1,14 +1,9 @@
 package com.ui.scannerapp.pages.CheckoutScreen
 
-import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.calculateEndPadding
-import androidx.compose.foundation.layout.calculateStartPadding
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -19,6 +14,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.ui.scannerapp.pages.CheckoutScreen.ScannerFeature.VisionFunction
 import com.ui.scannerapp.pages.theme.horizontalPadding
 
 // Main screen
@@ -48,7 +44,9 @@ fun PreviewScanner(){
 fun ScannerUI(navController: NavHostController){
     Row {
         // Main Camera screen.
-        Text("Hello scanner!")
+        Box{
+            VisionFunction()
+        }
     }
 }
 
