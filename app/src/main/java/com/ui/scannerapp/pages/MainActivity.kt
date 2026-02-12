@@ -22,6 +22,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.ui.scannerapp.pages.home.HomeView
 import com.ui.scannerapp.pages.CheckoutScreen.CheckoutScreen
+import com.ui.scannerapp.pages.CheckoutScreen.ScannerFeature.ScannerScreen
 import com.ui.scannerapp.pages.theme.ScannerAppTheme
 
 
@@ -64,14 +65,21 @@ fun MainEntryPoint(){
         // 4. Pass the controller into your NavHost
         NavHost(
             navController = navController,
-            startDestination = "home",
+            startDestination = "Home",
             modifier = Modifier.padding(innerPadding)
         ) {
-            composable("home") {
-                HomeView(onNavigateToProfile = { navController.navigate("detail") })
+            composable("Home") {
+                HomeView(onNavigateToProfile = { navController.navigate("Overview") })
             }
-            composable("detail") {
-                CheckoutScreen()
+            composable("Overview") {
+                // TODO: TEMP Solution, decouple this logic by passing NavHostController
+                CheckoutScreen(null, scanProduct = {
+                    navController.navigate("Bread-scanner")
+
+                })
+            }
+            composable("Bread-scanner") {
+                ScannerScreen(navController)
             }
         }
     }
