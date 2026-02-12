@@ -1,24 +1,27 @@
 package com.ui.scannerapp.pages.CheckoutScreen.ScannerFeature
 
 import android.Manifest
-import android.content.Context
 import android.content.pm.PackageManager
-import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.camera.core.ImageCapture
-import androidx.camera.core.ImageCaptureException
 import androidx.camera.view.LifecycleCameraController
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
-import java.io.File
-import java.util.concurrent.Executor
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.ui.scannerapp.pages.CheckoutScreen.ScannerFeature.viewmodel.CameraUtils.takePicture
+import com.ui.scannerapp.pages.CheckoutScreen.ScannerFeature.viewmodel.ScannerViewModel
 
 
 @Composable
@@ -39,56 +42,41 @@ fun VisionFunction() {
 }
 
 @Composable
-fun CameraWithCapture() {
+fun CameraWithCapture(viewModel: ScannerViewModel = viewModel()) {
     val context = LocalContext.current
+    val state = viewModel.uiState
     val cameraController = remember { LifecycleCameraController(context) }
-    var imageUri by remember { mutableStateOf<Uri?>(null) }
 
-    if (imageUri == null) {
-        Box(modifier = Modifier.fillMaxSize()) {
-            CameraPreview(cameraController, modifier = Modifier.fillMaxSize())
-            Button(onClick = {
-                takePicture(context, cameraController) { uri ->
-                    imageUri = uri
-                }
-            }) {
+    Box(modifier = Modifier.fillMaxSize()) {
+        if (state.capturedImage == null) {
+            // SHOW LIVE PREVIEW
+            CameraPreview(cameraController, Modifier.fillMaxSize())
+            Button(
+                onClick = { takePicture(
+                    context, cameraController, viewModel::onImageCaptured,
+                    onError = viewModel::onCaptureError
+                ) },
+                modifier = Modifier.align(Alignment.BottomCenter)
+            ) {
                 Text("Take Picture")
             }
-        }
-    } else {
-        imageUri?.let { uri ->
-            // You can add a composable to display the image here
-            Text("Image captured at: $uri")
-            Button(onClick = {
-                // Stub for processing image with a model
-                processImageWithModel(uri, "YourModelName")
-                // You can display the result here
-            }) {
-                Text("Process Image")
+        } else {
+            // SHOW CAPTURED IMAGE & RESULTS
+            Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+                Text("Review Photo", style = MaterialTheme.typography.headlineMedium)
+
+                if (state.isProcessing) {
+                    CircularProgressIndicator()
+                } else {
+                    Text(state.processingResult ?: "Ready to process")
+                    Button(onClick = { viewModel.onProcessImage(state.capturedImage, "yolo26n.pt") }) {
+                        Text("Analyze Product")
+                    }
+                    Button(onClick = { viewModel.onRetake() }) {
+                        Text("Retake")
+                    }
+                }
             }
         }
     }
-}
-
-private fun takePicture(context: Context, cameraController: LifecycleCameraController, onImageCaptured: (Uri) -> Unit) {
-    val photoFile = File(context.filesDir, "${System.currentTimeMillis()}.jpg")
-    val outputOptions = ImageCapture.OutputFileOptions.Builder(photoFile).build()
-    val executor: Executor = ContextCompat.getMainExecutor(context)
-    // Camera controller
-    cameraController.takePicture(outputOptions, executor, object : ImageCapture.OnImageSavedCallback {
-        override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
-            outputFileResults.savedUri?.let { onImageCaptured(it) }
-        }
-        override fun onError(exception: ImageCaptureException) {
-            // Handle error
-        }
-    })
-}
-
-// Stub function for processing the image with a PyTorch model
-private fun processImageWithModel(imageUri: Uri, modelName: String): String {
-    // In a real implementation, you would load your PyTorch model here
-    // and perform inference on the image.
-    // For now, this is just a stub.
-    return "Processed image with model: $modelName"
 }
