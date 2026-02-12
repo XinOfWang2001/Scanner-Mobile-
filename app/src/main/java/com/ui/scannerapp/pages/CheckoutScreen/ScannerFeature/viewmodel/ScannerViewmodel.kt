@@ -1,4 +1,5 @@
 package com.ui.scannerapp.pages.CheckoutScreen.ScannerFeature.viewmodel
+import android.app.Application
 import android.content.Context
 import android.graphics.BitmapFactory
 import android.net.Uri
@@ -14,6 +15,7 @@ import kotlinx.coroutines.withContext
 import org.pytorch.LiteModuleLoader
 import org.pytorch.torchvision.TensorImageUtils
 import androidx.core.graphics.scale
+import androidx.lifecycle.AndroidViewModel
 import org.pytorch.IValue
 import java.io.File
 import java.io.FileOutputStream
@@ -26,7 +28,7 @@ data class ScannerUiState(
     val errorMessage: String? = null
 )
 
-class ScannerViewModel : ViewModel() {
+class ScannerViewModel(application: Application) : AndroidViewModel(application) {
     var uiState by mutableStateOf(ScannerUiState())
         private set
 
@@ -59,15 +61,16 @@ class ScannerViewModel : ViewModel() {
     private suspend fun processImageWithModel(imageUri: Uri, modelName: String): String {
         // In a real implementation, you would load your PyTorch model here
         // and perform inference on the image.
+        val context = getApplication<Application>().applicationContext
         // For now, this is just a stub.
         return withContext(Dispatchers.IO) {
             try {
                 // 1. Load the Model (Should be in your assets folder)
-                val modelPath: String = assetFilePath(this@withContext as Context, modelName)
+                val modelPath: String = assetFilePath(context, modelName)
                 val module = LiteModuleLoader.load(modelPath)
 
                 // 2. Convert Uri to Bitmap
-                val inputStream = this@withContext.contentResolver.openInputStream(imageUri)
+                val inputStream = context.contentResolver.openInputStream(imageUri)
                 val bitmap = BitmapFactory.decodeStream(inputStream)
 
                 // 3. Pre-process (Resizing and Normalizing)
