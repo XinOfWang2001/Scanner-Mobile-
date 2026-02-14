@@ -69,7 +69,7 @@ fun CameraWithCapture(viewModel: ScannerViewModel = viewModel()) {
                     CircularProgressIndicator()
                 } else {
                     Text(state.processingResult ?: "Ready to process")
-                    Button(onClick = { viewModel.onProcessImage(state.capturedImage, "bakkery_model_v1.pth") }) {
+                    Button(onClick = { viewModel.onProcessImage(state.capturedImage, "bakkery_model_v1.onnx") }) {
                         Text("Analyze Product")
                     }
                     Button(onClick = { viewModel.onRetake() }) {
