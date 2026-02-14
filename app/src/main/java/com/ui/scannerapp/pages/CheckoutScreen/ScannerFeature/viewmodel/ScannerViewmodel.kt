@@ -101,7 +101,8 @@ class ScannerViewModel(application: Application) : AndroidViewModel(application)
         val file = File(context.filesDir, assetName)
 
         // If the file already exists, just return the path
-        if (file.exists() && file.length() > 0) {
+        val fileExists = file.exists() && file.length() > 0
+        if (fileExists) {
             return file.absolutePath
         }
 
