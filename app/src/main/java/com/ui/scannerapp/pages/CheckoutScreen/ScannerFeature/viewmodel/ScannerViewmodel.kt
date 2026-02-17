@@ -17,9 +17,12 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ai.onnxruntime.OnnxTensor
 import ai.onnxruntime.OrtEnvironment
+import androidx.lifecycle.application
+import com.ui.scannerapp.R
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
+import java.io.InputStream
 import java.nio.FloatBuffer
 
 data class ScannerUiState(
@@ -72,13 +75,12 @@ class ScannerViewModel(application: Application) : AndroidViewModel(application)
                 val inputTensor = preprocessONNX(resizedBitmap)
 
                 // 3. Load ONNX model and run inference
-                val modelPath = assetFilePath(context, modelName)
+                val model = getModel()
                 val ortEnvironment = OrtEnvironment.getEnvironment()
-                val session = ortEnvironment.createSession(modelPath)
+                val session = ortEnvironment.createSession(model)
 
                 val inputName = session.inputNames.iterator().next()
                 val inputs = mapOf(inputName to inputTensor)
-
                 session.use {
                     val outputs = it.run(inputs)
                     // Assuming the model has a single output of type float array
@@ -99,6 +101,10 @@ class ScannerViewModel(application: Application) : AndroidViewModel(application)
                 "Error: ${e.localizedMessage}"
             }
         }
+    }
+    private fun getModel(): ByteArray {
+        val modelId = R.raw.model
+        return this.application.resources.openRawResource(modelId).readBytes()
     }
 
     private fun preprocessONNX(bitmap: Bitmap): OnnxTensor {
@@ -133,29 +139,5 @@ class ScannerViewModel(application: Application) : AndroidViewModel(application)
         val shape = longArrayOf(1, 3, height.toLong(), width.toLong())
         val env = OrtEnvironment.getEnvironment()
         return OnnxTensor.createTensor(env, floatBuffer, shape)
-    }
-
-    @Throws(IOException::class)
-    fun assetFilePath(context: Context, assetName: String): String {
-        val fileName = assetName.substringAfterLast('/')
-        val file = File(context.filesDir, fileName)
-
-        // If the file already exists, just return the path
-        if (file.exists() && file.length() > 0) {
-            return file.absolutePath
-        }
-
-        // Otherwise, copy the asset to internal storage
-        context.assets.open(assetName).use { inputStream ->
-            FileOutputStream(file).use { outputStream ->
-                val buffer = ByteArray(4 * 1024)
-                var read: Int
-                while (inputStream.read(buffer).also { read = it } != -1) {
-                    outputStream.write(buffer, 0, read)
-                }
-                outputStream.flush()
-            }
-        }
-        return file.absolutePath
     }
 }
