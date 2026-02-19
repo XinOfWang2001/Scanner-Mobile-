@@ -84,13 +84,12 @@ class ScannerViewModel(application: Application) : AndroidViewModel(application)
                 session.use {
                     val outputs = it.run(inputs)
                     // Assuming the model has a single output of type float array
-                    @Suppress("UNCHECKED_CAST")
                     val outputTensorValue = outputs.first().value
-                    val scores = if (outputTensorValue is Array<*>) {
-                        (outputTensorValue as Array<FloatArray>)[0]
+                    val scores = if (outputTensorValue.value is Array<*>) {
+                        (outputTensorValue.value as Array<FloatArray>)[0]
                     } else {
                         // Handle cases where the output might be a flat FloatArray
-                        (outputTensorValue as FloatArray)
+                        (outputTensorValue.value as FloatArray)
                     }
 
                     // 4. Process output
