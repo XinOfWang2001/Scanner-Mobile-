@@ -17,6 +17,8 @@ import kotlinx.coroutines.withContext
 import com.ui.scannerapp.entities.data_str.ScannerUiState
 import com.ui.scannerapp.entities.domain.Prediction
 import com.ui.scannerapp.services.implementations.LocalModelService
+import com.ui.scannerapp.services.implementations.ProductService
+import com.ui.scannerapp.services.implementations.RawResourceService
 import com.ui.scannerapp.services.interfaces.IPredictionService
 
 
@@ -26,7 +28,8 @@ class ScannerViewModel(application: Application) : AndroidViewModel(application)
 
     val predictionService: IPredictionService = LocalModelService(
         this.application.resources.openRawResource(R.raw.model).readBytes(),
-        OrtEnvironment.getEnvironment())
+        OrtEnvironment.getEnvironment(),
+        ProductService(RawResourceService(application.applicationContext)))
 
     fun onImageCaptured(uri: Uri) {
         uiState = uiState.copy(capturedImage = uri)
