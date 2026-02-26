@@ -8,11 +8,12 @@ import android.graphics.BitmapFactory
 import androidx.core.graphics.scale
 import com.ui.scannerapp.entities.domain.Prediction
 import com.ui.scannerapp.services.interfaces.IPredictionService
+import com.ui.scannerapp.services.interfaces.IProductService
 import java.io.InputStream
 import java.nio.FloatBuffer
 import kotlin.use
 
-class LocalModelService(localModel: ByteArray, val onnxEnvironment: OrtEnvironment) : IPredictionService {
+class LocalModelService(localModel: ByteArray, val onnxEnvironment: OrtEnvironment, val productService: IProductService) : IPredictionService {
     val model = localModel
 
     override fun predict(bread: InputStream): Prediction {
@@ -26,7 +27,8 @@ class LocalModelService(localModel: ByteArray, val onnxEnvironment: OrtEnvironme
             val outputTensorValue = outputs.first().value
             val scores: FloatArray = outputTensorValue(outputTensorValue)
             val maxIdx = scores.indices.maxByOrNull { scores[it] } ?: -1
-            Prediction(maxIdx, 1.0.toFloat(), "Label is $maxIdx")
+            val label = productService.getProductByLabelId(maxIdx)
+            Prediction(maxIdx, 1.0.toFloat(), "Label is ${label?.name}")
         }
     }
 
