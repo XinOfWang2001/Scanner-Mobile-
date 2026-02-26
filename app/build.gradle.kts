@@ -59,8 +59,9 @@ dependencies {
     implementation(libs.play.services.mlkit.text.recognition.common)
     implementation(libs.play.services.mlkit.text.recognition)
     // PyTorch
-    implementation(libs.pytorch.android.lite)
-    implementation(libs.pytorch.android.torchvision.lite)
+//    implementation(libs.pytorch.android.lite)
+//    implementation(libs.pytorch.android.torchvision.lite)
+    implementation(libs.onnxruntime.android)
     // Test software
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
