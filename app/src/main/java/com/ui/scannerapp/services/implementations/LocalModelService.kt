@@ -23,12 +23,9 @@ class LocalModelService(localModel: ByteArray, val onnxEnvironment: OrtEnvironme
         val inputs = mapOf(inputName to tensor)
         return session.use {
             val outputs = it.run(inputs)
-            // Assuming the model has a single output of type float array
             val outputTensorValue = outputs.first().value
             val scores: FloatArray = outputTensorValue(outputTensorValue)
-            // 4. Process output
             val maxIdx = scores.indices.maxByOrNull { scores[it] } ?: -1
-            "Detected Class ID: $maxIdx"
             Prediction(maxIdx, 1.0.toFloat(), "Label is $maxIdx")
         }
     }
