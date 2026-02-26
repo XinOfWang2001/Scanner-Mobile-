@@ -1,5 +1,6 @@
 package com.ui.scannerapp.pages.CheckoutScreen.ScannerFeature.viewmodel
 
+import ai.onnxruntime.OrtEnvironment
 import android.app.Application
 import android.content.Context
 import android.graphics.Bitmap
@@ -10,18 +11,25 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.application
 import androidx.lifecycle.viewModelScope
+import com.ui.scannerapp.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import com.ui.scannerapp.entities.data_str.ScannerUiState
 import com.ui.scannerapp.entities.domain.Prediction
+import com.ui.scannerapp.services.implementations.LocalModelService
 import com.ui.scannerapp.services.interfaces.IPredictionService
 
 
-class ScannerViewModel(application: Application, val predictionService: IPredictionService) : AndroidViewModel(application) {
+class ScannerViewModel(application: Application) : AndroidViewModel(application) {
     var uiState by mutableStateOf(ScannerUiState())
         private set
+
+    val predictionService: IPredictionService = LocalModelService(
+        this.application.resources.openRawResource(R.raw.model).readBytes(),
+        OrtEnvironment.getEnvironment())
 
     fun onImageCaptured(uri: Uri) {
         uiState = uiState.copy(capturedImage = uri)

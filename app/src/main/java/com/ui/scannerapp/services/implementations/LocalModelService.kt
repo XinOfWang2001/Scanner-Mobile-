@@ -5,13 +5,10 @@ import ai.onnxruntime.OrtEnvironment
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import androidx.core.graphics.scale
-import androidx.lifecycle.application
-import com.ui.scannerapp.R
 import com.ui.scannerapp.entities.domain.Prediction
 import com.ui.scannerapp.services.interfaces.IPredictionService
 import java.io.InputStream
 import java.nio.FloatBuffer
-import kotlin.math.max
 import kotlin.use
 
 class LocalModelService(localModel: ByteArray, val onnxEnvironment: OrtEnvironment) : IPredictionService {
