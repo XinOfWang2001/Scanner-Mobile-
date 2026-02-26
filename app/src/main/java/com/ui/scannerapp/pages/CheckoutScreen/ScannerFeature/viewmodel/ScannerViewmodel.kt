@@ -2,9 +2,6 @@ package com.ui.scannerapp.pages.CheckoutScreen.ScannerFeature.viewmodel
 
 import ai.onnxruntime.OrtEnvironment
 import android.app.Application
-import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.net.Uri
 import androidx.camera.core.ImageCaptureException
 import androidx.compose.runtime.getValue

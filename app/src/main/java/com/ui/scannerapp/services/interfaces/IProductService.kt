@@ -1,6 +1,7 @@
 package com.ui.scannerapp.services.interfaces
 
+import com.ui.scannerapp.entities.domain.Product
+
 interface IProductService {
-    fun GetByLabel(label: String)
-    fun GetById(id: Int)
+    fun getProductByLabelId(id: Int): Product?
 }
