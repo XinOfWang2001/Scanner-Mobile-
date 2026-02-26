@@ -1,6 +1,7 @@
 package com.ui.scannerapp.services.implementations
 
 import ai.onnxruntime.OnnxTensor
+import ai.onnxruntime.OnnxValue
 import ai.onnxruntime.OrtEnvironment
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -17,27 +18,36 @@ class LocalModelService(localModel: ByteArray, val onnxEnvironment: OrtEnvironme
     override fun predict(bread: InputStream): Prediction {
         this.onnxEnvironment.createSession(this.model)
         val session = onnxEnvironment.createSession(model)
-        val bitmap = BitmapFactory.decodeStream(bread)
-        val resizedBitmap = bitmap.scale(224, 224)
-        val inputTensor = preprocessONNX(resizedBitmap)
+        val tensor = convertInputToTensor(bread)
         val inputName = session.inputNames.iterator().next()
-        val inputs = mapOf(inputName to inputTensor)
+        val inputs = mapOf(inputName to tensor)
         return session.use {
             val outputs = it.run(inputs)
             // Assuming the model has a single output of type float array
             val outputTensorValue = outputs.first().value
-            val scores = if (outputTensorValue.value is Array<*>) {
-                (outputTensorValue.value as Array<FloatArray>)[0]
-            } else {
-                // Handle cases where the output might be a flat FloatArray
-                (outputTensorValue.value as FloatArray)
-            }
-
+            val scores: FloatArray = outputTensorValue(outputTensorValue)
             // 4. Process output
             val maxIdx = scores.indices.maxByOrNull { scores[it] } ?: -1
             "Detected Class ID: $maxIdx"
             Prediction(maxIdx, 1.0.toFloat(), "Label is $maxIdx")
         }
+    }
+
+    private fun convertInputToTensor(bread: InputStream): OnnxTensor
+    {
+        val bitmap = BitmapFactory.decodeStream(bread)
+        val resizedBitmap = bitmap.scale(224, 224)
+        return preprocessONNX(resizedBitmap)
+    }
+
+    private fun outputTensorValue(onnxValue: OnnxValue): FloatArray {
+         if (onnxValue.value is Array<*>) {
+             return (onnxValue.value as Array<FloatArray>)[0]
+        } else {
+            // Handle cases where the output might be a flat FloatArray
+            return onnxValue.value as FloatArray
+        }
+
     }
 
     private fun preprocessONNX(bitmap: Bitmap): OnnxTensor {
