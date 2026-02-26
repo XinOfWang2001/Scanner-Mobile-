@@ -1,8 +1,8 @@
 package com.ui.scannerapp.services.interfaces
 
 import com.ui.scannerapp.entities.domain.Prediction
-import com.ui.scannerapp.entities.dto.PredictionDTO
+import java.io.InputStream
 
 interface IPredictionService {
-    fun PredictBakkery(bread: ByteArray): Prediction
+    fun predict(bread: InputStream): Prediction
 }

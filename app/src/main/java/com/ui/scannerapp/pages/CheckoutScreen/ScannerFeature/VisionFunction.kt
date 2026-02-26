@@ -22,6 +22,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ui.scannerapp.pages.CheckoutScreen.ScannerFeature.viewmodel.CameraUtils.takePicture
 import com.ui.scannerapp.pages.CheckoutScreen.ScannerFeature.viewmodel.ScannerViewModel
+import com.ui.scannerapp.services.implementations.LocalModelService
 
 
 @Composable
@@ -69,7 +70,7 @@ fun CameraWithCapture(viewModel: ScannerViewModel = viewModel()) {
                     CircularProgressIndicator()
                 } else {
                     Text(state.processingResult ?: "Ready to process")
-                    Button(onClick = { viewModel.onProcessImage(state.capturedImage, "yolo26n.pt") }) {
+                    Button(onClick = { viewModel.onProcessImage(state.capturedImage) }) {
                         Text("Analyze Product")
                     }
                     Button(onClick = { viewModel.onRetake() }) {

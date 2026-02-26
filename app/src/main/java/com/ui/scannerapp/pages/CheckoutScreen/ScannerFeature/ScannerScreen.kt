@@ -17,6 +17,7 @@ import androidx.navigation.NavHostController
 import com.ui.scannerapp.pages.theme.horizontalPadding
 
 // Main screen
+// TODO: Should have own viewmodel to in order to store state of this screen.
 @Composable
 fun ScannerScreen(navController: NavHostController) {
     Scaffold(
