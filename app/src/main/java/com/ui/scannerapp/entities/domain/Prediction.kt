@@ -1,13 +1,13 @@
 package com.ui.scannerapp.entities.domain
 
 class Prediction {
-    val LabelId: Int
-    val ConfidencePercentage: Float
-    val Label: String
+    val labelId: Int
+    val confidencePercentage: Float
+    val predictedProduct: Product?
 
-    constructor(LabelId: Int, ConfidencePercentage: Float, Label: String) {
-        this.LabelId = LabelId
-        this.ConfidencePercentage = ConfidencePercentage
-        this.Label = Label
+    constructor(labelId: Int, ConfidencePercentage: Float, predictedProduct: Product? = null) {
+        this.labelId = labelId
+        this.confidencePercentage = ConfidencePercentage
+        this.predictedProduct = predictedProduct
     }
 }
