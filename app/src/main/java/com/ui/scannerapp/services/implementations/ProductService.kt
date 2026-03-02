@@ -4,13 +4,17 @@ import com.ui.scannerapp.R
 import com.ui.scannerapp.entities.domain.Product
 import com.ui.scannerapp.services.interfaces.IProductService
 
-class ProductService(rawResources: RawResourceService) : IProductService {
+class ProductService : IProductService {
+    private val products: HashMap<String, Product> = HashMap(3)
 
-    private val labeledProducts: HashMap<Int, String> = rawResources.loadPredictionLabels(R.raw.model_label)
-    private val products: HashMap<String, Product> = HashMap()
-
-    override fun getProductByLabelId(id: Int): Product? {
-        val label = labeledProducts[id]
-        return products[label]
+    constructor(){
+        products.put("crois_lux", Product(0, "crois_lux", "Croissant luxe", "None", 0.1f))
+        products.put("fri_brd", Product(1, "fri_brd", "Frikandelbroodje", "None", 0.1f))
+        products.put("koff_brd", Product(2, "koff_brd", "Koffiebroodje", "None", 0.1f))
     }
+
+    override fun getProductByLabelId(labelId: String): Product {
+        return products.getValue(labelId)
+    }
+
 }

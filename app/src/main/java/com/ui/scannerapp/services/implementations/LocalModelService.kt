@@ -6,18 +6,23 @@ import ai.onnxruntime.OrtEnvironment
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import androidx.core.graphics.scale
+import com.ui.scannerapp.R
 import com.ui.scannerapp.entities.domain.Prediction
+import com.ui.scannerapp.entities.domain.Product
 import com.ui.scannerapp.services.interfaces.IPredictionService
 import com.ui.scannerapp.services.interfaces.IProductService
 import java.io.InputStream
 import java.nio.FloatBuffer
 import kotlin.use
 
-class LocalModelService(localModel: ByteArray, val onnxEnvironment: OrtEnvironment, val productService: IProductService) : IPredictionService {
-    val model = localModel
+class LocalModelService(val onnxEnvironment: OrtEnvironment,
+                        val productService: IProductService,
+                        val rawResources: RawResourceService) : IPredictionService {
+    val labels = rawResources.loadPredictionLabels(R.raw.model_label)
+    val model = rawResources.loadModel()
 
     override fun predict(bread: InputStream): Prediction {
-        this.onnxEnvironment.createSession(this.model)
+        this.onnxEnvironment.createSession(model)
         val session = onnxEnvironment.createSession(model)
         val tensor = convertInputToTensor(bread)
         val inputName = session.inputNames.iterator().next()
@@ -27,9 +32,14 @@ class LocalModelService(localModel: ByteArray, val onnxEnvironment: OrtEnvironme
             val outputTensorValue = outputs.first().value
             val scores: FloatArray = outputTensorValue(outputTensorValue)
             val maxIdx = scores.indices.maxByOrNull { scores[it] } ?: -1
-            val label = productService.getProductByLabelId(maxIdx)
-            Prediction(maxIdx, 1.0.toFloat(), "Label is ${label?.name}")
+            val predictedProduct = mapToProduct(maxIdx)
+            Prediction(maxIdx, 1.0.toFloat(), predictedProduct)
         }
+    }
+
+    private fun mapToProduct(labelId: Int): Product{
+        val label: String = labels.getValue(labelId)
+        return productService.getProductByLabelId(label)!!
     }
 
     private fun convertInputToTensor(bread: InputStream): OnnxTensor

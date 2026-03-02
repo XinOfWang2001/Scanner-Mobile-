@@ -27,9 +27,9 @@ class ScannerViewModel(application: Application) : AndroidViewModel(application)
         private set
 
     val predictionService: IPredictionService = LocalModelService(
-        this.application.resources.openRawResource(R.raw.model).readBytes(),
         OrtEnvironment.getEnvironment(),
-        ProductService(RawResourceService(application.applicationContext)))
+        ProductService(),
+        RawResourceService(application.applicationContext))
 
     fun onImageCaptured(uri: Uri) {
         uiState = uiState.copy(capturedImage = uri)
@@ -42,7 +42,7 @@ class ScannerViewModel(application: Application) : AndroidViewModel(application)
             val result = processImageWithModel(uri)
             uiState = uiState.copy(
                 isProcessing = false,
-                processingResult = result.Label
+                processingResult = result.predictedProduct!!.name
             )
         }
     }
@@ -61,11 +61,11 @@ class ScannerViewModel(application: Application) : AndroidViewModel(application)
             try {
                 // 1. Convert Uri to Bitmap
                 val inputStream = context.contentResolver.openInputStream(imageUri)
-                    ?: return@withContext Prediction(0, 0.toFloat(), "No Prediction made")
+                    ?: return@withContext Prediction(0, 0.toFloat(), null)
 
                 return@withContext predictionService.predict(inputStream);
             } catch (e: Exception) {
-                return@withContext Prediction(0, 0.toFloat(), "No Prediction made")
+                return@withContext Prediction(0, 0.toFloat(), null)
             }
         }
     }
