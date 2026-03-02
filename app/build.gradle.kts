@@ -62,6 +62,8 @@ dependencies {
 //    implementation(libs.pytorch.android.lite)
 //    implementation(libs.pytorch.android.torchvision.lite)
     implementation(libs.onnxruntime.android)
+    implementation(libs.androidx.compiler)
+    implementation(libs.core.ktx)
     // Test software
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

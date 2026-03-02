@@ -1,6 +1,8 @@
 package com.ui.scannerapp.services.implementations
 
 import android.content.Context
+import androidx.lifecycle.application
+import com.ui.scannerapp.R
 import org.json.JSONObject
 import java.io.InputStream
 import java.lang.NumberFormatException
@@ -28,5 +30,9 @@ class RawResourceService(private val context: Context) {
             e.printStackTrace()
         }
         return labelIdProduct
+    }
+
+    fun loadModel(): ByteArray{
+        return this.context.resources.openRawResource(R.raw.model).readBytes()
     }
 }
