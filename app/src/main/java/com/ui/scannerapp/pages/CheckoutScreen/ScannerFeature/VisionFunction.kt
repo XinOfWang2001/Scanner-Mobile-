@@ -24,8 +24,8 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ui.scannerapp.pages.CheckoutScreen.ScannerFeature.viewmodel.CameraUtils.takePicture
 import com.ui.scannerapp.pages.CheckoutScreen.ScannerFeature.viewmodel.ScannerViewModel
-import com.ui.scannerapp.services.implementations.BreadDetector
-import com.ui.scannerapp.services.implementations.LocalModelService
+import com.ui.scannerapp.pages.CheckoutScreen.ScannerFeature.viewmodel.BreadDetector
+import com.ui.scannerapp.services.implementations.modelservices.LocalModelService
 import com.ui.scannerapp.services.implementations.ProductService
 import com.ui.scannerapp.services.implementations.RawResourceService
 import java.util.concurrent.Executors

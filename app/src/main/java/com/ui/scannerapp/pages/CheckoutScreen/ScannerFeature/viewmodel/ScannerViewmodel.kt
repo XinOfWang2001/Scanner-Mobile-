@@ -18,10 +18,11 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import com.ui.scannerapp.entities.data_str.ScannerUiState
 import com.ui.scannerapp.entities.domain.Prediction
-import com.ui.scannerapp.services.implementations.BreadDetector
-import com.ui.scannerapp.services.implementations.LocalModelService
+import com.ui.scannerapp.pages.CheckoutScreen.ScannerFeature.viewmodel.BreadDetector
+import com.ui.scannerapp.services.implementations.modelservices.LocalModelService
 import com.ui.scannerapp.services.implementations.ProductService
 import com.ui.scannerapp.services.implementations.RawResourceService
+import com.ui.scannerapp.services.implementations.modelservices.TensorConverter
 import com.ui.scannerapp.services.interfaces.IPredictionService
 
 
@@ -33,6 +34,7 @@ class ScannerViewModel(application: Application) : AndroidViewModel(application)
     val predictionService: IPredictionService = LocalModelService(
         OrtEnvironment.getEnvironment(),
         ProductService(),
+        TensorConverter(),
         RawResourceService(application.applicationContext))
 
     fun onImageCaptured(uri: Uri) {
