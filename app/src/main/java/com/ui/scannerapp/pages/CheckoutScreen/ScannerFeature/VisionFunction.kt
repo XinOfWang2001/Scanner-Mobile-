@@ -53,7 +53,7 @@ fun CameraWithCapture(viewModel: ScannerViewModel = viewModel()) {
     val context = LocalContext.current
     val state = viewModel.uiState
     val cameraController = remember { LifecycleCameraController(context) }
-    var breadDetector = BreadDetector(RawResourceService(context), ProductService())
+    val breadDetector = BreadDetector(viewModel)
     // Setup analyzer
     val imageAnalysis = ImageAnalysis.Builder()
         .setOutputImageFormat(ImageAnalysis.OUTPUT_IMAGE_FORMAT_RGBA_8888)

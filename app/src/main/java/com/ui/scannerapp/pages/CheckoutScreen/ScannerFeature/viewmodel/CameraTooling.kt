@@ -26,6 +26,8 @@ object CameraUtils {
             ContextCompat.getMainExecutor(context),
             object : ImageCapture.OnImageSavedCallback {
                 override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
+                    // Stop the camera preview immediately after capture
+                    cameraController.unbind()
                     // Use the URI from the results
                     outputFileResults.savedUri?.let { onImageCaptured(it) }
                 }
