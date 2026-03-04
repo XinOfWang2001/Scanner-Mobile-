@@ -15,9 +15,6 @@ onnxruntimeAndroid = "latest.release"
 visionCommon = "17.3.0"
 playServicesMlkitTextRecognitionCommon = "19.1.0"
 playServicesMlkitTextRecognition = "19.0.1"
-pytorch_android_lite = "2.1.0"
-compiler = "3.2.0-alpha11"
-coreKtxVersion = "1.7.0"
 
 [libraries]
 androidx-camera-core = { module = "androidx.camera:camera-core", version.ref = "camerax_version" }
@@ -45,12 +42,7 @@ onnxruntime-android = { module = "com.microsoft.onnxruntime:onnxruntime-android"
 vision-common = { group = "com.google.mlkit", name = "vision-common", version.ref = "visionCommon" }
 play-services-mlkit-text-recognition-common = { group = "com.google.android.gms", name = "play-services-mlkit-text-recognition-common", version.ref = "playServicesMlkitTextRecognitionCommon" }
 play-services-mlkit-text-recognition = { group = "com.google.android.gms", name = "play-services-mlkit-text-recognition", version.ref = "playServicesMlkitTextRecognition" }
-pytorch-android-lite = { group = "org.pytorch", name = "pytorch_android_lite", version.ref = "pytorch_android_lite" }
-pytorch-android-torchvision-lite = { group = "org.pytorch", name = "pytorch_android_torchvision_lite", version.ref = "pytorch_android_lite" }
-androidx-compiler = { group = "androidx.databinding", name = "compiler", version.ref = "compiler" }
-core-ktx = { group = "androidx.test", name = "core-ktx", version.ref = "coreKtxVersion" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-
