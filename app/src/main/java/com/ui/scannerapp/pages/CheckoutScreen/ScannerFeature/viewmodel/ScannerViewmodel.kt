@@ -3,7 +3,9 @@ package com.ui.scannerapp.pages.CheckoutScreen.ScannerFeature.viewmodel
 import ai.onnxruntime.OrtEnvironment
 import android.app.Application
 import android.net.Uri
+import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageCaptureException
+import androidx.camera.core.Preview
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -16,9 +18,11 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import com.ui.scannerapp.entities.data_str.ScannerUiState
 import com.ui.scannerapp.entities.domain.Prediction
-import com.ui.scannerapp.services.implementations.LocalModelService
+import com.ui.scannerapp.pages.CheckoutScreen.ScannerFeature.viewmodel.BreadDetector
+import com.ui.scannerapp.services.implementations.modelservices.LocalModelService
 import com.ui.scannerapp.services.implementations.ProductService
 import com.ui.scannerapp.services.implementations.RawResourceService
+import com.ui.scannerapp.services.implementations.modelservices.TensorConverter
 import com.ui.scannerapp.services.interfaces.IPredictionService
 
 
@@ -26,9 +30,11 @@ class ScannerViewModel(application: Application) : AndroidViewModel(application)
     var uiState by mutableStateOf(ScannerUiState())
         private set
 
+
     val predictionService: IPredictionService = LocalModelService(
         OrtEnvironment.getEnvironment(),
         ProductService(),
+        TensorConverter(),
         RawResourceService(application.applicationContext))
 
     fun onImageCaptured(uri: Uri) {

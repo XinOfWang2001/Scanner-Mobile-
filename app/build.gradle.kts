@@ -47,23 +47,25 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.material.icons.extended.android)
+    
     // Navigation packages
     implementation(libs.androidx.navigation.compose)
+    
     // CameraX libraries
     implementation(libs.androidx.camera.core)
     implementation(libs.androidx.camera.camera2)
     implementation(libs.androidx.camera.lifecycle)
     implementation(libs.androidx.camera.view)
     implementation(libs.androidx.camera.mlkit.vision)
+    
+    // ML Kit
     implementation(libs.vision.common)
     implementation(libs.play.services.mlkit.text.recognition.common)
     implementation(libs.play.services.mlkit.text.recognition)
-    // PyTorch
-//    implementation(libs.pytorch.android.lite)
-//    implementation(libs.pytorch.android.torchvision.lite)
+    
+    // ONNX Runtime
     implementation(libs.onnxruntime.android)
-    implementation(libs.androidx.compiler)
-    implementation(libs.core.ktx)
+
     // Test software
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
