@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 
+// Component containing the visual aspect of the camera function.
 @Composable
 fun CameraPreview(cameraController: LifecycleCameraController, modifier: Modifier) {
     val lifecycleOwner = androidx.lifecycle.compose.LocalLifecycleOwner.current
