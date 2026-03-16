@@ -3,25 +3,22 @@ package com.ui.scannerapp.pages.CheckoutScreen.ScannerFeature.viewmodel
 import ai.onnxruntime.OrtEnvironment
 import android.app.Application
 import android.net.Uri
-import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageCaptureException
-import androidx.camera.core.Preview
+import androidx.camera.core.ImageProxy
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.application
 import androidx.lifecycle.viewModelScope
-import com.ui.scannerapp.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import com.ui.scannerapp.entities.data_str.ScannerUiState
 import com.ui.scannerapp.entities.domain.Prediction
-import com.ui.scannerapp.pages.CheckoutScreen.ScannerFeature.viewmodel.BreadDetector
 import com.ui.scannerapp.services.implementations.modelservices.LocalModelService
 import com.ui.scannerapp.services.implementations.ProductService
 import com.ui.scannerapp.services.implementations.RawResourceService
+import com.ui.scannerapp.services.implementations.modelservices.ObjectDetectionService
 import com.ui.scannerapp.services.implementations.modelservices.TensorConverter
 import com.ui.scannerapp.services.interfaces.IPredictionService
 
@@ -30,12 +27,16 @@ class ScannerViewModel(application: Application) : AndroidViewModel(application)
     var uiState by mutableStateOf(ScannerUiState())
         private set
 
-
+    // Perhaps need to be refactored with dependency injection
+    private val onnxEnvironment: OrtEnvironment = OrtEnvironment.getEnvironment();
+    private val tensorConverter:TensorConverter = TensorConverter()
+    private val rawResourceService: RawResourceService = RawResourceService(application.applicationContext)
     val predictionService: IPredictionService = LocalModelService(
-        OrtEnvironment.getEnvironment(),
+        onnxEnvironment,
         ProductService(),
-        TensorConverter(),
-        RawResourceService(application.applicationContext))
+        tensorConverter,
+        rawResourceService)
+    val objectDetector: ObjectDetectionService = ObjectDetectionService(onnxEnvironment, rawResourceService, tensorConverter)
 
     fun onImageCaptured(uri: Uri) {
         uiState = uiState.copy(capturedImage = uri)
@@ -53,8 +54,11 @@ class ScannerViewModel(application: Application) : AndroidViewModel(application)
         }
     }
 
+    fun onAnalysis(){
+        println("On scanning.")
+    }
+
     fun onRetake() {
-        println("Time to retake the picture.")
         uiState = ScannerUiState() // Reset state
     }
 

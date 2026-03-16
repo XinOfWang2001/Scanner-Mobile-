@@ -37,6 +37,6 @@ class RawResourceService(private val context: Context) {
     }
 
     fun loadYoloModel(): ByteArray{
-        return TODO("Provide the return value")
+        return this.context.resources.openRawResource(R.raw.yolo26n).readBytes()
     }
 }
