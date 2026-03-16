@@ -23,7 +23,7 @@ class LocalModelService(val onnxEnvironment: OrtEnvironment,
         val tensor = tensorConverter.convertInputToTensor(bread)
         val inputName = session.inputNames.iterator().next()
         val inputs = mapOf(inputName to tensor)
-        return session.use {
+        return session.use { it ->
             val outputs = it.run(inputs)
             val outputTensorValue = outputs.first().value
             val scores: FloatArray = tensorConverter.outputTensorValue(outputTensorValue)

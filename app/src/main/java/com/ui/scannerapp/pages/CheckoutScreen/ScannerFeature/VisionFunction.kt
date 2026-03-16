@@ -62,7 +62,7 @@ fun CameraWithCapture(viewModel: ScannerViewModel = viewModel()) {
     val analysisExecutor = Executors.newSingleThreadExecutor()
 
     imageAnalysis.setAnalyzer(analysisExecutor) { imageProxy ->
-        // Cut
+        // Will use the object detection model to scan for any objects
         breadDetector.analyze(imageProxy)
     }
     // For prototype sake still in this function.
