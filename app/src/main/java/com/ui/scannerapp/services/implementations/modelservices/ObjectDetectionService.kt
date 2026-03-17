@@ -11,7 +11,6 @@ class ObjectDetectionService(
     val onnxEnvironment: OrtEnvironment,
     val rawResourceService: RawResourceService,
     val tensorConverter: TensorConverter) {
-    // Should return smaller pieces, usable for prediction purposes.
 
     // Other data type is needed, cannot inherit from IPredictionService.
     fun predict(rawImage: InputStream): Prediction {
@@ -20,12 +19,13 @@ class ObjectDetectionService(
         val tensorInput = tensorConverter.convertInputToTensor(rawImage)
         val inputName = session.inputNames.iterator().next()
         val inputs = mapOf(inputName to tensorInput)
+        // A two-step model usage is in place
         return session.use {
             val outputs = it.run(inputs)
             val outputTensorValue = outputs.first().value
             val scores: FloatArray = tensorConverter.outputTensorValue(outputTensorValue)
             val maxIdx = scores.indices.maxByOrNull { scores[it] } ?: -1
-            // Should split images into smaller input streams usable for the other model.
+            // Get the boxes of object detection model.
 
             // Placeholder value
             Prediction(maxIdx, 1.0.toFloat(), null)

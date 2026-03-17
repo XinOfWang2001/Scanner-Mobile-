@@ -55,6 +55,7 @@ class ScannerViewModel(application: Application) : AndroidViewModel(application)
     }
 
     fun onAnalysis(){
+        // Update the UI state, so that objects are detected.
         println("On scanning.")
     }
 
