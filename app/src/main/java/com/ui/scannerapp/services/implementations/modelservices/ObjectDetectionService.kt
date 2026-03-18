@@ -20,16 +20,8 @@ class ObjectDetectionService(
         val inputName = session.inputNames.iterator().next()
         val inputs = mapOf(inputName to tensorInput)
         // A two-step model usage is in place
-        return session.use {
-            val outputs = it.run(inputs)
-            val outputTensorValue = outputs.first().value
-            val scores: FloatArray = tensorConverter.outputTensorValue(outputTensorValue)
-            val maxIdx = scores.indices.maxByOrNull { scores[it] } ?: -1
-            // Get the boxes of object detection model.
-
-            // Placeholder value
-            Prediction(maxIdx, 1.0.toFloat(), null)
-        }
+        var result = session.run(inputs)
+        return Prediction(1, 1.0.toFloat(), null)
     }
 
 }

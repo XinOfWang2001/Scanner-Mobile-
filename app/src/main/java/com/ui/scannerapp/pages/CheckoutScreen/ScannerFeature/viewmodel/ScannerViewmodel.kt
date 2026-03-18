@@ -29,14 +29,15 @@ class ScannerViewModel(application: Application) : AndroidViewModel(application)
 
     // Perhaps need to be refactored with dependency injection
     private val onnxEnvironment: OrtEnvironment = OrtEnvironment.getEnvironment();
-    private val tensorConverter:TensorConverter = TensorConverter()
+    private val tensorConverter:TensorConverter = TensorConverter(224,224)
+    private val yoloTensorConverter: TensorConverter = TensorConverter(640, 640)
     private val rawResourceService: RawResourceService = RawResourceService(application.applicationContext)
     val predictionService: IPredictionService = LocalModelService(
         onnxEnvironment,
         ProductService(),
         tensorConverter,
         rawResourceService)
-    val objectDetector: ObjectDetectionService = ObjectDetectionService(onnxEnvironment, rawResourceService, tensorConverter)
+    val objectDetector: ObjectDetectionService = ObjectDetectionService(onnxEnvironment, rawResourceService, yoloTensorConverter)
 
     fun onImageCaptured(uri: Uri) {
         uiState = uiState.copy(capturedImage = uri)
