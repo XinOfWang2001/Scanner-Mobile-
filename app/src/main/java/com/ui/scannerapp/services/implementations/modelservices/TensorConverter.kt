@@ -9,23 +9,22 @@ import androidx.core.graphics.scale
 import java.io.InputStream
 import java.nio.FloatBuffer
 
-class TensorConverter {
+class TensorConverter (val width: Int = 224, val height: Int = 224){
+
+
 
     fun convertInputToTensor(bread: InputStream): OnnxTensor
     {
         val bitmap = BitmapFactory.decodeStream(bread)
-        val resizedBitmap = bitmap.scale(224, 224)
+        val resizedBitmap = bitmap.scale(width, height)
         return preprocessONNX(resizedBitmap)
     }
 
     fun outputTensorValue(onnxValue: OnnxValue): FloatArray {
         if (onnxValue.value is Array<*>) {
             return (onnxValue.value as Array<FloatArray>)[0]
-        } else {
-            // Handle cases where the output might be a flat FloatArray
-            return onnxValue.value as FloatArray
-        }
-
+        }// Handle cases where the output might be a flat FloatArray
+        return onnxValue.value as FloatArray
     }
 
     private fun preprocessONNX(bitmap: Bitmap): OnnxTensor {
