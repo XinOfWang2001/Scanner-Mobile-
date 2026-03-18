@@ -1,6 +1,7 @@
 package com.ui.scannerapp.services.implementations.modelservices
 
 import ai.onnxruntime.OrtEnvironment
+import android.graphics.Bitmap
 import com.ui.scannerapp.R
 import com.ui.scannerapp.entities.domain.Prediction
 import com.ui.scannerapp.entities.domain.Product
