@@ -31,7 +31,7 @@ class TensorConverter (val width: Int = 224, val height: Int = 224){
         val width = bitmap.width
         val height = bitmap.height
         val floatBuffer = FloatBuffer.allocate(3 * width * height)
-
+        
         // Normalization constants (ImageNet)
         val mean = floatArrayOf(0.485f, 0.456f, 0.406f)
         val std = floatArrayOf(0.229f, 0.224f, 0.225f)
