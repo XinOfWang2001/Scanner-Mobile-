@@ -37,7 +37,7 @@ class ScannerViewModel(application: Application) : AndroidViewModel(application)
         ProductService(),
         tensorConverter,
         rawResourceService)
-    val objectDetector: ObjectDetectionService = ObjectDetectionService(onnxEnvironment, rawResourceService, yoloTensorConverter)
+    val objectDetector: ObjectDetectionService = ObjectDetectionService(onnxEnvironment, rawResourceService, yoloTensorConverter, predictionService)
 
     fun onImageCaptured(uri: Uri) {
         uiState = uiState.copy(capturedImage = uri)

@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory
 import com.ui.scannerapp.entities.data_str.DetectedBox
 import com.ui.scannerapp.entities.domain.Prediction
 import com.ui.scannerapp.services.implementations.RawResourceService
+import com.ui.scannerapp.services.interfaces.IPredictionService
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
@@ -15,7 +16,7 @@ class ObjectDetectionService(
     onnxEnvironment: OrtEnvironment,
     rawResourceService: RawResourceService,
     val tensorConverter: TensorConverter,
-    val localModelService: LocalModelService
+    val localModelService: IPredictionService
 ) {
     private val model = rawResourceService.loadYoloModel()
     private var session: OrtSession = onnxEnvironment.createSession(model)
@@ -25,25 +26,24 @@ class ObjectDetectionService(
         val tensorInput = tensorConverter.convertInputToTensor(imageBytes.inputStream())
         val inputName = session.inputNames.iterator().next()
         val inputs = mapOf(inputName to tensorInput)
-        session.use {
-            val outputs = it.run(inputs)
-            outputs.use {
-                // For the AGENT: Need to be this implementation in order for the next lines of code to work.
-                val outputValue = outputs?.get(0)?.value
-                // Fix for ClassCastException: Cast to Array<Array<FloatArray>> for float[][][]
-                @Suppress("UNCHECKED_CAST")
-                val detections: Array<FloatArray> = (outputValue as Array<Array<FloatArray>>)[0]
-                detectedBoxes = processDetections(detections)
-                detectedBoxes.forEach { box ->
-                    val fullBitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
-                    if (fullBitmap != null){
-                        val cropped = box.cropDetectedBox(fullBitmap)
-                        val stream = ByteArrayOutputStream()
-                        cropped?.compress(Bitmap.CompressFormat.PNG, 100, stream)
-                        val inputStream = ByteArrayInputStream(stream.toByteArray())
-                        val result: Prediction = localModelService.predict(inputStream)
-                        box.setPrediction(result)
-                    }
+        
+        val outputs = session.run(inputs)
+        outputs.use {
+            // For the AGENT: Need to be this implementation in order for the next lines of code to work.
+            val outputValue = outputs?.get(0)?.value
+            // Fix for ClassCastException: Cast to Array<Array<FloatArray>> for float[][][]
+            @Suppress("UNCHECKED_CAST")
+            val detections: Array<FloatArray> = (outputValue as Array<Array<FloatArray>>)[0]
+            detectedBoxes = processDetections(detections)
+            detectedBoxes.forEach { box ->
+                val fullBitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+                if (fullBitmap != null){
+                    val cropped = box.cropDetectedBox(fullBitmap)
+                    val stream = ByteArrayOutputStream()
+                    cropped?.compress(Bitmap.CompressFormat.PNG, 100, stream)
+                    val inputStream = ByteArrayInputStream(stream.toByteArray())
+                    val result: Prediction = localModelService.predict(inputStream)
+                    box.setPrediction(result)
                 }
             }
         }
@@ -52,7 +52,7 @@ class ObjectDetectionService(
 
     // detection[X-Coordinates, Y-coordinates, width, height, confidence, class_id]
     private fun processDetections(detections: Array<FloatArray>): List<DetectedBox>{
-        val confidenceThreshold = 0.2f
+        val confidenceThreshold = 0.15f
         val xIndex = 0
         val yIndex = 1
         val widthIndex = 2
