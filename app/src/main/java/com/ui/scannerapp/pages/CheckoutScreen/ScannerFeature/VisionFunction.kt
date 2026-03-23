@@ -4,7 +4,6 @@ import android.Manifest
 import android.content.pm.PackageManager
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.camera.core.ImageAnalysis
 import androidx.camera.view.LifecycleCameraController
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,7 +16,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
@@ -25,10 +23,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ui.scannerapp.pages.CheckoutScreen.ScannerFeature.viewmodel.CameraUtils.takePicture
 import com.ui.scannerapp.pages.CheckoutScreen.ScannerFeature.viewmodel.ScannerViewModel
 import com.ui.scannerapp.pages.CheckoutScreen.ScannerFeature.viewmodel.BreadDetector
-import com.ui.scannerapp.services.implementations.modelservices.LocalModelService
-import com.ui.scannerapp.services.implementations.ProductService
-import com.ui.scannerapp.services.implementations.RawResourceService
-import java.util.concurrent.Executors
+
 
 
 @Composable
@@ -53,18 +48,8 @@ fun CameraWithCapture(viewModel: ScannerViewModel = viewModel()) {
     val context = LocalContext.current
     val state = viewModel.uiState
     val cameraController = remember { LifecycleCameraController(context) }
-    val breadDetector = BreadDetector(viewModel)
-    // Setup analyzer
-    val imageAnalysis = ImageAnalysis.Builder()
-        .setOutputImageFormat(ImageAnalysis.OUTPUT_IMAGE_FORMAT_RGBA_8888)
-        .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
-        .build()
-    val analysisExecutor = Executors.newSingleThreadExecutor()
+    val breadDetector = remember { BreadDetector(viewModel) }
 
-    imageAnalysis.setAnalyzer(analysisExecutor) { imageProxy ->
-        // Will use the object detection model to scan for any objects
-        breadDetector.analyze(imageProxy)
-    }
     // For prototype sake still in this function.
     LaunchedEffect(cameraController) {
         cameraController.setImageAnalysisAnalyzer(
@@ -77,6 +62,10 @@ fun CameraWithCapture(viewModel: ScannerViewModel = viewModel()) {
         if (state.capturedImage == null) {
             // SHOW LIVE PREVIEW
             CameraPreview(cameraController, Modifier.fillMaxSize())
+            
+            // Draw Bounding Boxes Overlay
+            BoundingBoxOverlay(state.detectedBoxes)
+
             Button(
                 onClick = { takePicture(
                     context, cameraController, viewModel::onImageCaptured,
@@ -106,3 +95,4 @@ fun CameraWithCapture(viewModel: ScannerViewModel = viewModel()) {
         }
     }
 }
+
