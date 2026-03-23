@@ -4,7 +4,6 @@ import ai.onnxruntime.OrtEnvironment
 import android.app.Application
 import android.net.Uri
 import androidx.camera.core.ImageCaptureException
-import androidx.camera.core.ImageProxy
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -21,6 +20,7 @@ import com.ui.scannerapp.services.implementations.RawResourceService
 import com.ui.scannerapp.services.implementations.modelservices.ObjectDetectionService
 import com.ui.scannerapp.services.implementations.modelservices.TensorConverter
 import com.ui.scannerapp.services.interfaces.IPredictionService
+import com.ui.scannerapp.entities.data_str.DetectedBox
 
 
 class ScannerViewModel(application: Application) : AndroidViewModel(application) {
@@ -37,7 +37,7 @@ class ScannerViewModel(application: Application) : AndroidViewModel(application)
         ProductService(),
         tensorConverter,
         rawResourceService)
-    val objectDetector: ObjectDetectionService = ObjectDetectionService(onnxEnvironment, rawResourceService, yoloTensorConverter)
+    val objectDetector: ObjectDetectionService = ObjectDetectionService(onnxEnvironment, rawResourceService, yoloTensorConverter, predictionService)
 
     fun onImageCaptured(uri: Uri) {
         uiState = uiState.copy(capturedImage = uri)
@@ -55,9 +55,9 @@ class ScannerViewModel(application: Application) : AndroidViewModel(application)
         }
     }
 
-    fun onAnalysis(){
+    fun onAnalysis(detectedBoxes: List<DetectedBox>){
         // Update the UI state, so that objects are detected.
-        println("On scanning.")
+        uiState = uiState.copy(detectedBoxes = detectedBoxes)
     }
 
     fun onRetake() {

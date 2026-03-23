@@ -15,9 +15,8 @@ class BreadDetector(val vm: ScannerViewModel): ImageAnalysis.Analyzer {
         val inputStream = ByteArrayOutputStream()
         image.toBitmap().compress(Bitmap.CompressFormat.JPEG, 100, inputStream)
         val result = vm.objectDetector.predict(ByteArrayInputStream(inputStream.toByteArray()))
-        println("Scan this frame?!! Prediction is ${result.predictedProduct?.name}")
-        // Some callback to the UI
-        vm.onAnalysis()
+        // Pass the detected boxes to the UI
+        vm.onAnalysis(result)
         image.close()
     }
 }
