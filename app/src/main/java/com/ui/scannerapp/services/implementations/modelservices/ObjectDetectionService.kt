@@ -52,7 +52,7 @@ class ObjectDetectionService(
 
     // detection[X-Coordinates, Y-coordinates, width, height, confidence, class_id]
     private fun processDetections(detections: Array<FloatArray>): List<DetectedBox>{
-        val confidenceThreshold = 0.15f
+        val confidenceThreshold = 0.14f
         val xIndex = 0
         val yIndex = 1
         val widthIndex = 2
