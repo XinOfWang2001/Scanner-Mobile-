@@ -112,6 +112,9 @@ fun BottomButtonComponent(navController: NavHostController, viewModel: ScannerVi
             }
             Button(modifier = horizontalPadding,onClick = {
                 // Persist state of predictions to previous screen.
+                val products = viewModel.uiState.predictions.map { it.getPrediction().predictedProduct }
+                navController.previousBackStackEntry?.savedStateHandle?.set("products", products)
+                navController.popBackStack()
             }) {
                 Text("Confirm")
             }
