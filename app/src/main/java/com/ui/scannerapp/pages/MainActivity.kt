@@ -72,11 +72,7 @@ fun MainEntryPoint(){
                 HomeView(onNavigateToProfile = { navController.navigate("Overview") })
             }
             composable("Overview") {
-                // TODO: TEMP Solution, decouple this logic by passing NavHostController
-                CheckoutScreen(null, scanProduct = {
-                    navController.navigate("Bread-scanner")
-
-                })
+                CheckoutScreen(null, navController)
             }
             composable("Bread-scanner") {
                 ScannerScreen(navController)

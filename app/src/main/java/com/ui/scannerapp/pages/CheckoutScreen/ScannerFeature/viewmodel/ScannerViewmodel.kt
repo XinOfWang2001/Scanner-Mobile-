@@ -21,6 +21,8 @@ import com.ui.scannerapp.services.implementations.modelservices.ObjectDetectionS
 import com.ui.scannerapp.services.implementations.modelservices.TensorConverter
 import com.ui.scannerapp.services.interfaces.IPredictionService
 import com.ui.scannerapp.entities.data_str.DetectedBox
+import kotlinx.coroutines.withTimeout
+import kotlin.concurrent.timer
 
 
 class ScannerViewModel(application: Application) : AndroidViewModel(application) {
@@ -40,18 +42,10 @@ class ScannerViewModel(application: Application) : AndroidViewModel(application)
     val objectDetector: ObjectDetectionService = ObjectDetectionService(onnxEnvironment, rawResourceService, yoloTensorConverter, predictionService)
 
     fun onImageCaptured(uri: Uri) {
-        uiState = uiState.copy(capturedImage = uri)
-    }
-
-    fun onProcessImage(uri: Uri) {
-        uiState = uiState.copy(isProcessing = true)
-        // Use viewModelScope to process off the main thread
+        // Ensure the new state is captured before processing.
+        uiState = uiState.copy(capturedImage = uri, isProcessing = true)
         viewModelScope.launch(Dispatchers.Default) {
-            val result = processImageWithModel(uri)
-            uiState = uiState.copy(
-                isProcessing = false,
-                processingResult = result.predictedProduct!!.name
-            )
+            uiState = uiState.copy(isProcessing = false, predictions = processImageWithModel(uri))
         }
     }
 
@@ -67,17 +61,18 @@ class ScannerViewModel(application: Application) : AndroidViewModel(application)
     fun onCaptureError(exception: ImageCaptureException) {
         uiState = uiState.copy(errorMessage = "Capture failed: ${exception.message}")
     }
-    private suspend fun processImageWithModel(imageUri: Uri): Prediction {
+
+    private suspend fun processImageWithModel(imageUri: Uri): List<DetectedBox> {
         val context = getApplication<Application>().applicationContext
         return withContext(Dispatchers.IO) {
             try {
                 // 1. Convert Uri to Bitmap
                 val inputStream = context.contentResolver.openInputStream(imageUri)
-                    ?: return@withContext Prediction(0, 0.toFloat(), null)
+                    ?: return@withContext mutableListOf()
 
-                return@withContext predictionService.predict(inputStream);
+                return@withContext objectDetector.predict(inputStream);
             } catch (e: Exception) {
-                return@withContext Prediction(0, 0.toFloat(), null)
+                return@withContext mutableListOf()
             }
         }
     }

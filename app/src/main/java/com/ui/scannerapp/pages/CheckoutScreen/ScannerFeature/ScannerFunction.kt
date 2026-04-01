@@ -7,6 +7,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.view.LifecycleCameraController
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
@@ -20,14 +21,15 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import com.ui.scannerapp.pages.CheckoutScreen.ScannerFeature.viewmodel.CameraUtils.takePicture
 import com.ui.scannerapp.pages.CheckoutScreen.ScannerFeature.viewmodel.ScannerViewModel
 import com.ui.scannerapp.pages.CheckoutScreen.ScannerFeature.viewmodel.BreadDetector
-
+import com.ui.scannerapp.pages.theme.horizontalPadding
 
 
 @Composable
-fun VisionFunction() {
+fun VisionFunction(viewModel: ScannerViewModel) {
     val context = LocalContext.current
     var hasCameraPermission by remember { mutableStateOf(ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) }
     val launcher = rememberLauncherForActivityResult(contract = ActivityResultContracts.RequestPermission()) { isGranted ->
@@ -35,7 +37,7 @@ fun VisionFunction() {
     }
 
     if (hasCameraPermission) {
-        CameraWithCapture()
+        CameraWithCapture(viewModel)
     } else {
         Button(onClick = { launcher.launch(Manifest.permission.CAMERA) }) {
             Text("Request Camera Permission")
@@ -44,7 +46,7 @@ fun VisionFunction() {
 }
 
 @Composable
-fun CameraWithCapture(viewModel: ScannerViewModel = viewModel()) {
+fun CameraWithCapture(viewModel: ScannerViewModel) {
     val context = LocalContext.current
     val state = viewModel.uiState
     val cameraController = remember { LifecycleCameraController(context) }
@@ -78,14 +80,14 @@ fun CameraWithCapture(viewModel: ScannerViewModel = viewModel()) {
         } else {
             // SHOW CAPTURED IMAGE & RESULTS
             Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
-                Text("Review Photo", style = MaterialTheme.typography.headlineMedium)
-
+//                Text("Review Photo", style = MaterialTheme.typography.headlineMedium)
                 if (state.isProcessing) {
                     CircularProgressIndicator()
                 } else {
-                    Text(state.processingResult ?: "Ready to process")
-                    Button(onClick = { viewModel.onProcessImage(state.capturedImage) }) {
-                        Text("Analyze Product")
+                    Text("Amount of products detected: ${state.detectedBoxes.size}")
+                    // Show all the predictions
+                    for (prediction in state.detectedBoxes) {
+                        Text(prediction.getPrediction().predictedProduct?.name ?: "Unknown")
                     }
                     Button(onClick = { viewModel.onRetake() }) {
                         Text("Retake")
@@ -96,3 +98,26 @@ fun CameraWithCapture(viewModel: ScannerViewModel = viewModel()) {
     }
 }
 
+@Composable
+fun BottomButtonComponent(navController: NavHostController, viewModel: ScannerViewModel){
+    // Bottom buttons: Basic design. TODO: Add more interactive bottom design.
+    Column {
+        Row(modifier = Modifier.padding(48.dp),
+            verticalAlignment = Alignment.Bottom) {
+            Button(
+                modifier = horizontalPadding, onClick = {
+                    navController.popBackStack()
+                }) {
+                Text("Back")
+            }
+            Button(modifier = horizontalPadding,onClick = {
+                // Persist state of predictions to previous screen.
+                val products = viewModel.uiState.predictions.map { it.getPrediction().predictedProduct }
+                navController.previousBackStackEntry?.savedStateHandle?.set("products", products)
+                navController.popBackStack()
+            }) {
+                Text("Confirm")
+            }
+        }
+    }
+}

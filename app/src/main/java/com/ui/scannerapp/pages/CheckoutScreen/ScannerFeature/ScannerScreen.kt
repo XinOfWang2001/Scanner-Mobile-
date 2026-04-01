@@ -13,23 +13,25 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.ui.scannerapp.pages.CheckoutScreen.ScannerFeature.viewmodel.ScannerViewModel
 import com.ui.scannerapp.pages.theme.horizontalPadding
 
 // Main screen
 // TODO: Should have own viewmodel to in order to store state of this screen.
 @Composable
-fun ScannerScreen(navController: NavHostController) {
+fun ScannerScreen(navController: NavHostController, viewModel: ScannerViewModel = viewModel()) {
     Scaffold(
         modifier = Modifier.padding(4.dp),
         bottomBar = {
-            BottomButtonComponent(navController)
+            BottomButtonComponent(navController, viewModel)
         })
     { values ->
         Column(modifier = Modifier
             .padding(10.dp, 10.dp, 10.dp, values.calculateBottomPadding())
         ) {
-            ScannerUI(navController)
+            ScannerUI(navController, viewModel)
         }
     }
 }
@@ -41,33 +43,11 @@ fun PreviewScanner(){
 }
 
 @Composable
-fun ScannerUI(navController: NavHostController){
+fun ScannerUI(navController: NavHostController, viewModel: ScannerViewModel){
     Row {
         // Main Camera screen.
         Box{
-            VisionFunction()
-        }
-    }
-}
-
-@Composable
-fun BottomButtonComponent(navController: NavHostController){
-    // Bottom buttons: Basic design. TODO: Add more interactive bottom design.
-    Column {
-        Row(modifier = Modifier.padding(48.dp),
-            verticalAlignment = Alignment.Bottom) {
-            Button(
-                modifier = horizontalPadding, onClick = {
-                navController.popBackStack()
-            }) {
-                Text("Back")
-            }
-            Button(modifier = horizontalPadding,onClick = {}) {
-                Text("Scan")
-            }
-            Button(modifier = horizontalPadding,onClick = {}) {
-                Text("Next")
-            }
+            VisionFunction(viewModel)
         }
     }
 }
