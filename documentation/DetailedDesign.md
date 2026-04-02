@@ -24,4 +24,4 @@ The following diagram illustrates the high-level relationships between the main 
 3.  **Checkout Logic**: Manages the accumulation of scanned items and the final transaction state.
 
 ---
-*Last updated: April 2024*
+*Last updated: April 2026*
