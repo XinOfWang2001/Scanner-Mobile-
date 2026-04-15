@@ -62,7 +62,7 @@ class ObjectDetectionService(
             val confidence = it[confIndex]
             confidence > confidenceThreshold
         }
-        return newResult.map {  captureDetections(it[xIndex], it[yIndex], it[widthIndex], it[heightIndex]) };
+        return newResult.map {  captureDetections(it[xIndex], it[yIndex], it[widthIndex], it[heightIndex]) }
     }
 
     // ClassLabel is not necessary since the YOLO model only functions as a detector.

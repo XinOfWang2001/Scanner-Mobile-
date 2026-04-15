@@ -30,7 +30,7 @@ class ScannerViewModel(application: Application) : AndroidViewModel(application)
         private set
 
     // Perhaps need to be refactored with dependency injection
-    private val onnxEnvironment: OrtEnvironment = OrtEnvironment.getEnvironment();
+    private val onnxEnvironment: OrtEnvironment = OrtEnvironment.getEnvironment()
     private val tensorConverter:TensorConverter = TensorConverter(224,224)
     private val yoloTensorConverter: TensorConverter = TensorConverter(640, 640)
     private val rawResourceService: RawResourceService = RawResourceService(application.applicationContext)
@@ -70,7 +70,7 @@ class ScannerViewModel(application: Application) : AndroidViewModel(application)
                 val inputStream = context.contentResolver.openInputStream(imageUri)
                     ?: return@withContext mutableListOf()
 
-                return@withContext objectDetector.predict(inputStream);
+                return@withContext objectDetector.predict(inputStream)
             } catch (e: Exception) {
                 return@withContext mutableListOf()
             }

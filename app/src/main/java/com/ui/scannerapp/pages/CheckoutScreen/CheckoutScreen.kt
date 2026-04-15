@@ -32,9 +32,12 @@ import kotlin.collections.emptyList
 fun CheckoutScreen(overrideCheckout: Checkout? = null, navController: NavHostController, viewModel: CheckoutViewmodel = viewModel()){
     val checkOut by viewModel.checkout
 
+    // Sensitive to bugs. Another solution needs to be thinked.
+    // Alternatives:
+    // SQLite data, chance to cause bugs to persistence of data
+    // In-Memory solution should be taken. But in which data structure should it be implemented?
     val navBackStackEntry = navController.currentBackStackEntry
-    val result = navBackStackEntry?.savedStateHandle
-        ?.getStateFlow<List<Product>>("products", emptyList())?.collectAsState()
+    val result = navBackStackEntry?.savedStateHandle ?.getStateFlow<List<Product>>("products", emptyList())?.collectAsState()
     LaunchedEffect(result) {
         viewModel.addProducts(result!!.value)
         navBackStackEntry.savedStateHandle.remove<List<Product>>("products")
@@ -57,7 +60,10 @@ fun CheckoutScreen(overrideCheckout: Checkout? = null, navController: NavHostCon
 @Composable
 fun CheckoutScreenPreview() {
     // Dummy values
-    CheckoutScreen(null, NavHostController(LocalContext.current))
+    var checkout = Checkout()
+    var product = Product(0, "crois_lux", "Croissant luxe", "None", 0.1f)
+    checkout.addProduct(product)
+    CheckoutScreen(checkout, NavHostController(LocalContext.current))
 }
 
 @Composable

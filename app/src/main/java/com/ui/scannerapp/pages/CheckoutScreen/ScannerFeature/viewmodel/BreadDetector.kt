@@ -10,7 +10,7 @@ import kotlin.use
 
 class BreadDetector(val vm: ScannerViewModel): ImageAnalysis.Analyzer {
 
-    private var counter = 1;
+    private var counter = 1
 
     override fun analyze(image: ImageProxy) {
         // Somewhat working prototype
@@ -22,11 +22,11 @@ class BreadDetector(val vm: ScannerViewModel): ImageAnalysis.Analyzer {
             counter = 0
             vm.onAnalysis(result)
         }
-        counter++;
+        counter++
         image.close()
     }
 
     private fun interval(): Boolean{
-        return (counter == 1);
+        return (counter == 1)
     }
 }

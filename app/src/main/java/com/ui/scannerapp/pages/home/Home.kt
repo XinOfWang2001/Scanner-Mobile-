@@ -14,7 +14,7 @@ import com.ui.scannerapp.pages.theme.spaceHeightSmall
 
 @Composable
 fun HomeView(onNavigateToProfile: () -> Unit) {
-    Scaffold() { mod ->
+    Scaffold { mod ->
         Column(modifier = Modifier.padding(mod.calculateBottomPadding())) {
             Spacer(modifier = spaceHeightSmall)
             Row {
